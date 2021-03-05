@@ -1,0 +1,16 @@
+name: "Verify PR Review Approval"
+description: "Verifies that the number of reviewers matches the configured approval count on a closed PR"
+author: dnorth98
+runs:
+  using: docker
+  image: Dockerfile
+branding:
+  icon: user-check
+  color: purple
+inputs:
+  repo_access_pat:
+    description: 'PAT with access to read the repo configuration.'
+    required: true
+outputs:
+  reviewed:
+    description: 'true/false whether this PR has been reviewed by the required number of reviewers.'
