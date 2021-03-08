@@ -51,7 +51,7 @@ function main {
                 --header "authorization: Bearer ${GITHUB_TOKEN}" \
                 --header "content-type: application/json" | jq length)
 
-            echo "this PR has been reviewed by ${review_count} people"
+            echo "this PR has been reviewed by ${review_count} reviewer(s)"
 
             # Now, how many reviews does this repo need?
             default_branch=$(jq -r '.head.repo.default_branch' "${pr_obj_path}")
@@ -60,18 +60,18 @@ function main {
             branches_url=$(jq -r '.head.repo.branches_url' "${pr_obj_path}")
             echo "branches url: ${branches_url}"
 
-            pr_request_reviews_url=$(sed "s/{\/branch}/\/${default_branch}\/protection\/required_pull_request_reviews/" <<< ${branches_url})
+            pr_request_reviews_url=$(sed "s/{\/branch}/\/${default_branch}\/protection/" <<< "${branches_url}")
             echo "Getting required number of reviewers for this repo from: ${pr_request_reviews_url}"
 
             required_reviewers_count=$(curl -sSf \
                 --url "${pr_request_reviews_url}" \
                 --header "Accept: application/vnd.github.luke-cage-preview+json" \
                 --header "authorization: Bearer ${repo_access_pat}" \
-                --header "content-type: application/json" |jq '.required_approving_review_count |values')
+                --header "content-type: application/json" |jq '.required_pull_request_reviews.required_approving_review_count |values')
 
             if [ -z "${required_reviewers_count}" ]; then
-                echo "*** Unable to retrieve the required reviewers count - defaulting to 1"
-                required_reviewers_count=1
+                echo "*** Unable to retrieve the required reviewers count - defaulting to 0"
+                required_reviewers_count=0
             fi
 
             echo "this PR requires ${required_reviewers_count} reviews to pass checks"
