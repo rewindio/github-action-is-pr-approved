@@ -22,6 +22,7 @@ jobs:
     - uses: actions/checkout@master
 
     - name: Reviewed
+      id: verify_reviewers
       uses: docker://rewindio/github-action-is-pr-approved
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
