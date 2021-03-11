@@ -28,7 +28,19 @@ jobs:
       with:
         REPO_ACCESS_PAT: "${{ secrets.GITHUB_TOKEN_WITH_REPO_ACCESS }}"
 
+      - name: Print Review Status
+        env:
+          reviewed: ${{ steps.verify_reviewers.outputs.reviewed }}
+        run:
+          echo "The pr review status is $reviewed"
 
+      - name: Apply Not Reviewed Label
+        if: steps.verify_reviewers.outputs.reviewed == 'false'
+        uses: actions-ecosystem/action-add-labels@v1 
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          labels: |
+            emergency-change
 ```
 
 ### Environment Variables
