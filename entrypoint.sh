@@ -99,7 +99,7 @@ function main {
         fi
     fi
 
-  echo ::set-output name=reviewed::${required_reviewers}
+  echo reviewed=${required_reviewers} >> $GITHUB_OUTPUT
 }
 
 main "${*}"
