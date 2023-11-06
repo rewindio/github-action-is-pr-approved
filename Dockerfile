@@ -1,4 +1,4 @@
-FROM alpine:3.14
+FROM alpine:latest
 
 LABEL "com.github.actions.name"="Verify PR Review Approval"
 LABEL "com.github.actions.description"="Verifies that the number of reviewers matches the configured approval count on a closed PR"
